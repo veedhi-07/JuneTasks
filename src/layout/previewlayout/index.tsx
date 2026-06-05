@@ -1,24 +1,3 @@
-// import PreviewForm from "../../components/previewform";
-// export default function PreviewLayout() {
-//   return (
-//     <>
-//       <div className=" w-[calc(100%-2px)]">
-//         <div className="flex flex-col items-center border border-4 h-screen w-full ">
-//           <div className="flex flex-col items-center bg-blue-200 h-screen mt-5 rounded-2xl w-2xl">
-//             <div>
-//               <h1 className="items-center font-extrabold font-sans mt-5">
-//                 <strong>FORM PREVIEW</strong>
-//               </h1>
-//               <div className="border border-4 rounded-2xl h-screen w-2xs">
-//                 <PreviewForm />
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </>
-//   );
-// }
 import PreviewForm from "../../components/previewform";
 
 export default function PreviewLayout() {

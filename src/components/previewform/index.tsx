@@ -13,6 +13,7 @@ export default function PreviewForm() {
           </div>
         </div>
       ))}
+      <button className="bg-blue-300 h-11 w-30 ml-2 mb-2 mt-2">Submit</button>
     </>
   );
 }
