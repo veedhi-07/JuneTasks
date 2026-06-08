@@ -23,8 +23,8 @@ export default function PreviewForm() {
       ),
     [fields],
   );
-  // console.log(fields);
-  // console.log(validationSchema);
+  console.log(fields);
+  console.log(validationSchema);
   if (isSubmitted) {
     return (
       <div className="h-700px flex items-center justify-center bg-white">
@@ -67,8 +67,9 @@ export default function PreviewForm() {
                       mr-2
                     "
                   >
-                    ✕
+                    X
                   </button>
+
                   <DynamicFields
                     field={field}
                     values={values}

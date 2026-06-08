@@ -69,7 +69,6 @@ export default function DynamicFields({
           <input
             type="checkbox"
             name={field.id}
-            // value={values[field.id] || ""}
             checked={Boolean(values[field.id])}
             onChange={handleChange}
           />
@@ -86,7 +85,6 @@ export default function DynamicFields({
           <input
             type="radio"
             name={field.id}
-            // value={values[field.id] || ""}
             checked={Boolean(values[field.id])}
             onChange={handleChange}
           />
