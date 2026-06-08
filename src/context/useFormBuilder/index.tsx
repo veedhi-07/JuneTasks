@@ -1,9 +1,16 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
-import type { FieldType, FormField } from "../../types";
+import type { FieldType, FormField, ValidationRules } from "../../types";
 
 type FormContextType = {
   fields: FormField[];
-  addField: (type: FieldType, label: string, placeholder?: string) => void;
+  addField: (
+    type: FieldType,
+    label: string,
+    placeholder?: string,
+    options?: string[],
+    validation?: ValidationRules,
+  ) => void;
+  removeField: (id: string) => void;
 };
 
 const FormContext = createContext<FormContextType | null>(null);
@@ -15,7 +22,13 @@ type FormProviderProps = {
 export function FormProvider({ children }: FormProviderProps) {
   const [fields, setFields] = useState<FormField[]>([]);
 
-  const addField = (type: FieldType, label: string, placeholder?: string) => {
+  const addField = (
+    type: FieldType,
+    label: string,
+    placeholder?: string,
+    options?: string[],
+    validation?: ValidationRules,
+  ) => {
     setFields((prev) => [
       ...prev,
       {
@@ -23,8 +36,14 @@ export function FormProvider({ children }: FormProviderProps) {
         type,
         label,
         placeholder,
+        options,
+        validation,
       },
     ]);
+  };
+
+  const removeField = (id: string) => {
+    setFields((prev) => prev.filter((field) => field.id !== id));
   };
 
   return (
@@ -32,6 +51,7 @@ export function FormProvider({ children }: FormProviderProps) {
       value={{
         fields,
         addField,
+        removeField,
       }}
     >
       {children}
