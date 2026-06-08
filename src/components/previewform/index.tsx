@@ -22,7 +22,7 @@ export default function PreviewForm() {
         {} as Record<string, string>,
       ),
     [fields],
-  );  
+  );
   console.log(fields);
   console.log(validationSchema);
   if (isSubmitted) {
@@ -78,12 +78,14 @@ export default function PreviewForm() {
                 </div>
               </div>
             ))}
-            <button
-              className="bg-blue-300 h-11 w-30 ml-2 mb-2 mt-2"
-              type="submit"
-            >
-              Submit
-            </button>
+            {fields.length > 0 && (
+              <button
+                className="bg-blue-300 h-11 w-30 ml-2 mb-2 mt-2"
+                type="submit"
+              >
+                Submit
+              </button>
+            )}
           </Form>
         )}
       </Formik>
