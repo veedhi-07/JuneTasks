@@ -41,11 +41,13 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="w-80 p-4 flex flex-col space-x-5 gap-5 h-screen bg-linear-to-b from-rose-200 via-pink-100 to-purple-200">
+    <div className="w-80 p-4 flex flex-col  gap-5 h-screen bg-linear-to-b from-rose-200 via-pink-100 to-purple-200">
       <h1>
-        <strong>Slect Field To Add In Form</strong>
+        <strong>Select Field To Add In Form</strong>
       </h1>
+      <hr></hr>
       <select
+        className="outline rounded-md"
         value={type}
         onChange={(e) => setType(e.target.value as FieldType)}
       >
@@ -58,6 +60,7 @@ export default function Sidebar() {
       </select>
 
       <input
+        className="outline  rounded-md pl-2"
         type="text"
         placeholder="Label"
         value={label}
@@ -66,6 +69,7 @@ export default function Sidebar() {
 
       {type !== "checkbox" && type !== "radio" && (
         <input
+          className="outline  rounded-md pl-2"
           type="text"
           placeholder="Placeholder"
           value={placeholder}
@@ -75,6 +79,7 @@ export default function Sidebar() {
 
       {type === "select" && (
         <input
+          className="outline rounded-md pl-2"
           type="text"
           placeholder="Option1, Option2, Option3"
           value={options}
@@ -82,6 +87,25 @@ export default function Sidebar() {
         />
       )}
 
+      {type !== "checkbox" && type !== "radio" && (
+        <>
+          <input
+            className="outline  rounded-md pl-2"
+            type="number"
+            placeholder="Min Length"
+            value={minLength}
+            onChange={(e) => setMinLength(e.target.value)}
+          />
+
+          <input
+            className="outline rounded-md pl-2"
+            type="number"
+            placeholder="Max Length"
+            value={maxLength}
+            onChange={(e) => setMaxLength(e.target.value)}
+          />
+        </>
+      )}
       <label>
         <input
           type="checkbox"
@@ -90,29 +114,7 @@ export default function Sidebar() {
         />
         Required
       </label>
-
-      {type !== "checkbox" && type !== "radio" && (
-        <>
-          <input
-            type="number"
-            placeholder="Min Length"
-            value={minLength}
-            onChange={(e) => setMinLength(e.target.value)}
-          />
-
-          <input
-            type="number"
-            placeholder="Max Length"
-            value={maxLength}
-            onChange={(e) => setMaxLength(e.target.value)}
-          />
-        </>
-      )}
-
-      <button
-        className="bg-blue-300 h-11 w-30 ml-2 mb-2 mt-2"
-        onClick={handleAdd}
-      >
+      <button className="bg-blue-300 h-11 w-30 rounded-md" onClick={handleAdd}>
         Add Field
       </button>
     </div>

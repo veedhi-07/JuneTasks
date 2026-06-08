@@ -23,14 +23,14 @@ export default function PreviewForm() {
       ),
     [fields],
   );
-  console.log(fields);
-  console.log(validationSchema);
+  // console.log(fields);
+  // console.log(validationSchema);
   if (isSubmitted) {
     return (
       <div className="h-700px flex items-center justify-center bg-white">
         <div className="text-center">
           <h1 className="text-4xl font-bold">Thank You!</h1>
-          <p className="mt-4 text-gray-600">
+          <p className="mt-4 text-gray-700">
             Your form has been submitted successfully.
           </p>
         </div>

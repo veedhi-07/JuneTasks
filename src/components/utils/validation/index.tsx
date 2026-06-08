@@ -2,9 +2,12 @@ import * as Yup from "yup";
 import type { FormField } from "../../../types";
 
 export const createValidationSchema = (fields: FormField[]) => {
+  //creates empty object
   const schemaFields: Record<string, Yup.AnySchema> = {};
 
   fields.forEach((field) => {
+    //base vvalidator
+
     let validator = Yup.string();
 
     if (field.validation?.required) {
@@ -25,7 +28,6 @@ export const createValidationSchema = (fields: FormField[]) => {
       );
     }
 
-
     if (field.type === "email") {
       validator = validator
         .required("Email is required")
@@ -34,6 +36,6 @@ export const createValidationSchema = (fields: FormField[]) => {
 
     schemaFields[field.id] = validator;
   });
-
+  //format which formik expects
   return Yup.object(schemaFields);
 };
