@@ -1,5 +1,9 @@
-import MainLayout from "../../task3/layout/mainlayout";
+import MainLayout from "../../task3/components/main";
 
 export default function KanbanboardPage() {
-  return <>{/* <MainLayout /> */}</>;
+  return (
+    <>
+      <MainLayout />
+    </>
+  );
 }
