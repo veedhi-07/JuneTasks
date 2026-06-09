@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
-import type { FieldType, FormField, ValidationRules } from "../../types";
+import type { FieldType, FormField, ValidationRules } from "../../types/index";
 
 type FormContextType = {
   fields: FormField[];

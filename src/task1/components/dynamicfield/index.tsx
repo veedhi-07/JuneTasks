@@ -12,6 +12,7 @@ export default function DynamicFields({
   errors,
   handleChange,
 }: Props) {
+  console.log("Values:", values);
   switch (field.type) {
     case "text":
       return (

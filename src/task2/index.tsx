@@ -10,18 +10,20 @@ export default function UsersTable() {
   ]);
 
   const exportToJSON = () => {
+    //
     const jsonString = JSON.stringify(users, null, 2);
-
+    //create file dynamically in memory and download it
     const blob = new Blob([jsonString], {
       type: "application/json",
     });
-
+    //temporary url
     const url = URL.createObjectURL(blob);
-
+    //trigger download
     const a = document.createElement("a");
     a.href = url;
     a.download = "user.json";
     a.click();
+    //cleanup memory
     URL.revokeObjectURL(url);
   };
 
