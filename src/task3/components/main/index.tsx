@@ -38,6 +38,7 @@ export default function MainLayout() {
       ),
     );
   };
+
   //filters task whose id === taskid.Keeps the selected tasks in array.
   const multipleSelect = (taskId: string) => {
     setSelectedTaskId((prev) =>
@@ -46,6 +47,7 @@ export default function MainLayout() {
         : [...prev, taskId],
     );
   };
+
   const todoTasks = tasks.filter((task) => task.status === "todo");
   const inProgressTasks = tasks.filter((task) => task.status === "inProgress");
   const doneTasks = tasks.filter((task) => task.status === "done");
@@ -53,23 +55,27 @@ export default function MainLayout() {
     <>
       <div>
         <div className=" flex flex-col min-h-screen bg-linear-to-br from-sky-100 via-blue-200 to-blue-400">
-          <div className="">
-            <div className="h-45">
-              <label className="font-bold font-serif ml-2">Enter Task: </label>
-              <input
-                className="outline h-7 w-40 mt-5 rounded-2xl p-2"
-                type="text"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-              ></input>
-              <button
-                onClick={addTask}
-                className=" ml-3 bg-linear-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-lg hover:scale-105 transition-transform"
-              >
-                Add Todo
-              </button>
-            </div>
+          <div className="h-45">
+            <label className="font-bold font-serif ml-2">Enter Task: </label>
+            <input
+              className="outline h-7 w-40 mt-5 rounded-2xl p-2"
+              type="text"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  addTask();
+                }
+              }}
+            ></input>
+            <button
+              onClick={addTask}
+              className=" ml-3 h-8 bg-linear-to-r from-blue-500 to-blue-700 text-white px-4  rounded-lg"
+            >
+              Add Todo
+            </button>
           </div>
+
           <div className="flex flex-row justify-center items-center">
             <div
               onDragOver={(e) => e.preventDefault()}
@@ -88,7 +94,7 @@ export default function MainLayout() {
                   className="flex flex-row"
                   key={task.id}
                   draggable
-                  //if dragged task is selected move all else only dragged task.
+                  //if selected task is dragged move all else move only selected task
                   onDragStart={() => {
                     if (selectedTaskId.includes(task.id)) {
                       setDraggedTaskId(selectedTaskId);
