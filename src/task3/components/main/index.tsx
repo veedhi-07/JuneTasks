@@ -1,17 +1,22 @@
 import { useState } from "react";
 import type { Task } from "../../types";
+import { X } from "lucide-react";
 
 export default function MainLayout() {
+  //store and update whole task
   const [tasks, setTasks] = useState<Task[]>([]);
   const [text, setText] = useState("");
-  const [draggedTask, setDraggedTask] = useState<string | null>(null);
+  //currently dragged
+  const [draggedTaskId, setDraggedTaskId] = useState<string[]>([]);
+  //currently selected
+  const [selectedTaskId, setSelectedTaskId] = useState<string[]>([]);
 
   //addtask
   const addTask = () => {
     if (!text.trim()) return;
 
     const newTask: Task = {
-      id: crypto.randomUUID(),
+      id: Date.now().toString(),
       title: text,
       status: "todo",
     };
@@ -19,37 +24,47 @@ export default function MainLayout() {
 
     setText("");
   };
+
   //deletetask
   const deleteTask = (id: string) => {
     setTasks((prev) => prev.filter((task) => task.id !== id));
   };
-  const todoTasks = tasks.filter((task) => task.status === "todo");
-  //dragtask
-  const dragTask = (taskId: string, status: Task["status"]) => {
+
+  //movetask
+  const dragTasks = (taskIds: string[], status: Task["status"]) => {
     setTasks((prev) =>
-      prev.map((task) => (task.id === taskId ? { ...task, status } : task)),
+      prev.map((task) =>
+        taskIds.includes(task.id) ? { ...task, status } : task,
+      ),
     );
   };
+  //filters task whose id === taskid.Keeps the selected tasks in array.
+  const multipleSelect = (taskId: string) => {
+    setSelectedTaskId((prev) =>
+      prev.includes(taskId)
+        ? prev.filter((id) => id !== taskId)
+        : [...prev, taskId],
+    );
+  };
+  const todoTasks = tasks.filter((task) => task.status === "todo");
   const inProgressTasks = tasks.filter((task) => task.status === "inProgress");
-
   const doneTasks = tasks.filter((task) => task.status === "done");
   return (
     <>
       <div>
-        <div className=" flex flex-col min-h-screen bg-gradient-to-br from-sky-100 via-blue-200 to-blue-400">
-          {/* <InputTodo /> */}
+        <div className=" flex flex-col min-h-screen bg-linear-to-br from-sky-100 via-blue-200 to-blue-400">
           <div className="">
             <div className="h-45">
-              <label>Enter a Todo:</label>
+              <label className="font-bold font-serif ml-2">Enter Task: </label>
               <input
-                className="outline h-7 w-40 mt-5 rounded-2xl"
+                className="outline h-7 w-40 mt-5 rounded-2xl p-2"
                 type="text"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
               ></input>
               <button
                 onClick={addTask}
-                className=" ml-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-lg hover:scale-105 transition-transform"
+                className=" ml-3 bg-linear-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-lg hover:scale-105 transition-transform"
               >
                 Add Todo
               </button>
@@ -59,9 +74,9 @@ export default function MainLayout() {
             <div
               onDragOver={(e) => e.preventDefault()}
               onDrop={() => {
-                if (!draggedTask) return;
-                dragTask(draggedTask, "todo");
-                setDraggedTask(null);
+                if (draggedTaskId.length === 0) return;
+                dragTasks(draggedTaskId, "todo");
+                setDraggedTaskId([]);
               }}
               className="text-2xl text-center h-120 w-100 bg-white/30 backdrop-blur-md rounded-2xl shadow-xl border border-white/40 p-8 w-full max-w-md mr-5"
             >
@@ -73,15 +88,29 @@ export default function MainLayout() {
                   className="flex flex-row"
                   key={task.id}
                   draggable
-                  onDragStart={() => setDraggedTask(task.id)}
+                  //if dragged task is selected move all else only dragged task.
+                  onDragStart={() => {
+                    if (selectedTaskId.includes(task.id)) {
+                      setDraggedTaskId(selectedTaskId);
+                    } else {
+                      setDraggedTaskId([task.id]);
+                    }
+                  }}
                 >
-                  <div className="text-2xl ">{task.title}</div>
                   <button
                     onClick={() => deleteTask(task.id)}
                     className="text-red-500 p-2 text-sm"
                   >
-                    Delete
+                    <X size={20} />
                   </button>
+                  <div
+                    onClick={() => multipleSelect(task.id)}
+                    className={
+                      selectedTaskId.includes(task.id) ? "bg-gray-300" : ""
+                    }
+                  >
+                    {task.title}
+                  </div>
                 </div>
               ))}
             </div>
@@ -89,9 +118,9 @@ export default function MainLayout() {
             <div
               onDragOver={(e) => e.preventDefault()}
               onDrop={() => {
-                if (!draggedTask) return;
-                dragTask(draggedTask, "inProgress");
-                setDraggedTask(null);
+                if (!draggedTaskId.length) return;
+                dragTasks(draggedTaskId, "inProgress");
+                setDraggedTaskId([]);
               }}
               className="text-2xl  text-center h-120 w-100 bg-white/30 backdrop-blur-md rounded-2xl shadow-xl border border-white/40 p-8  w-full  max-w-md  mr-5"
             >
@@ -103,17 +132,29 @@ export default function MainLayout() {
                 <div
                   key={task.id}
                   draggable
-                  onDragStart={() => setDraggedTask(task.id)}
+                  onDragStart={() => {
+                    if (selectedTaskId.includes(task.id)) {
+                      setDraggedTaskId(selectedTaskId);
+                    } else {
+                      setDraggedTaskId([task.id]);
+                    }
+                  }}
                   className="flex flex-row"
                 >
-                  <div>{task.title}</div>
-
                   <button
                     onClick={() => deleteTask(task.id)}
                     className="text-red-500 p-2 text-sm"
                   >
-                    Delete
+                    <X size={20} />
                   </button>
+                  <div
+                    onClick={() => multipleSelect(task.id)}
+                    className={
+                      selectedTaskId.includes(task.id) ? "bg-gray-300" : ""
+                    }
+                  >
+                    {task.title}
+                  </div>
                 </div>
               ))}
             </div>
@@ -121,11 +162,11 @@ export default function MainLayout() {
             <div
               onDragOver={(e) => e.preventDefault()}
               onDrop={() => {
-                if (!draggedTask) return;
-                dragTask(draggedTask, "done");
-                setDraggedTask(null);
+                if (!draggedTaskId.length) return;
+                dragTasks(draggedTaskId, "done");
+                setDraggedTaskId([]);
               }}
-              className=" text-2xl text-center h-120 w-100  bg-white/30 backdrop-blur-md rounded-2xl shadow-xl  border border-white/40  p-8 w-full max-w-md"
+              className="text-2xl text-center h-120 w-100  bg-white/30 backdrop-blur-md rounded-2xl shadow-xl  border border-white/40  p-8 w-full max-w-md"
             >
               <h2>
                 <strong>Completed</strong>
@@ -134,17 +175,29 @@ export default function MainLayout() {
                 <div
                   key={task.id}
                   draggable
-                  onDragStart={() => setDraggedTask(task.id)}
+                  onDragStart={() => {
+                    if (selectedTaskId.includes(task.id)) {
+                      setDraggedTaskId(selectedTaskId);
+                    } else {
+                      setDraggedTaskId([task.id]);
+                    }
+                  }}
                   className="flex flex-row"
                 >
-                  <div>{task.title}</div>
-
                   <button
                     onClick={() => deleteTask(task.id)}
                     className="text-red-500 p-2 text-sm"
                   >
-                    Delete
+                    <X size={20} />
                   </button>
+                  <div
+                    onClick={() => multipleSelect(task.id)}
+                    className={
+                      selectedTaskId.includes(task.id) ? "bg-gray-300" : ""
+                    }
+                  >
+                    {task.title}
+                  </div>
                 </div>
               ))}
             </div>
